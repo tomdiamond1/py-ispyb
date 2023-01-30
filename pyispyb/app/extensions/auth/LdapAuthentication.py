@@ -25,12 +25,12 @@ class LdapAuthentication(AbstractAuthentication):
             )
             self.ldap_conn = ldap.initialize(self.ldap_url)
             self.ldap_conn.simple_bind_s(
-                f"uid={login},{self.ldap_base_internal}", password
+                f"cn={login},{self.ldap_base_internal}", password
             )
             res = self.ldap_conn.search_s(
                 self.ldap_base_internal,
                 ldap.SCOPE_ONELEVEL,
-                f"(uid={login})",
+                f"(cn={login})",
                 ["*"],
             )[0][1]
             return models.Person(

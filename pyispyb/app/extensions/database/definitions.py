@@ -74,7 +74,7 @@ def with_authorization(
         joinSessionHasPerson: whether to join `models.SessionHasPerson`
     """
     # `all_proposals`` can access all sessions
-    if "all_proposals" in g.permissions:
+    if "super_admin" in g.permissions:
         logger.info("user has `all_proposals`")
         return query
 

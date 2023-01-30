@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class XFEFluorescenceSpectrum(BaseModel):
-    xfeFluorescenceSpectrumId: int
+    xfeFluorescenceSpectrumId: int | None
 
     class Config:
         orm_mode = True

@@ -40,9 +40,9 @@ def init_app(app: FastAPI, prefix: str = None, **kwargs):
             except Exception:
                 logger.exception(f"Could not import module `{module_name}`")
 
-    from .legacy import init_app
+    #from .legacy import init_app
 
-    init_app(app, prefix=prefix)
+    #init_app(app, prefix=prefix)
 
     from .admin import init_app
 

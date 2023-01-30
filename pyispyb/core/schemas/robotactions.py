@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class RobotAction(BaseModel):
-    actionType: str
+    actionType: Optional[str]
     status: Optional[str]
     message: Optional[str]
 

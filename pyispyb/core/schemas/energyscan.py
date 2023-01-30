@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class EnergyScan(BaseModel):
-    energyScanId: int
+    energyScanId: int | None
 
     class Config:
         orm_mode = True
