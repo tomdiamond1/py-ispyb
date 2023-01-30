@@ -1,10 +1,14 @@
 import enum
+import logging
 from typing import Callable, Optional, Any
 
 from fastapi import HTTPException, Query
 from pydantic import conint
 
 from .app.globals import g
+
+
+logger = logging.getLogger(__name__)
 
 
 class Order(str, enum.Enum):
@@ -26,7 +30,7 @@ def order_by_factory(columns: dict[str], enumName: str) -> Callable:
         order_by: Optional[order_by_enum] = Query(
             None, description="Field to order by"
         ),
-        order: Optional[Order] = Query(Order.asc, description="Order direction"),
+        order: Optional[Order] = Query(None, description="Order direction"),
     ) -> dict[str, Any]:
         order_fields = {"order_by": order_by}
         order_fields["order"] = order
@@ -45,7 +49,13 @@ def permission(permission: str):
 
     async def with_permission() -> bool:
         if permission not in g.permissions:
-            raise HTTPException(status_code=403, detail="Not Authorised")
+            logger.info(
+                f"User {g.login} tried to access route with required permission {permission}"
+            )
+            raise HTTPException(
+                status_code=403,
+                detail="Not Authorized",
+            )
 
         return True
 
