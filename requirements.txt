@@ -1,4 +1,4 @@
-ispyb-models==1.0.6
+ispyb-models-daiquiri
 
 fastapi
 pydantic[dotenv]
