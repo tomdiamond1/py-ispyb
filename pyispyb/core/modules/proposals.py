@@ -1,3 +1,4 @@
+import logging
 from typing import Optional
 
 from sqlalchemy import or_, func, distinct
@@ -11,6 +12,8 @@ from ...app.extensions.database.definitions import (
     with_authorization,
 )
 
+logger = logging.getLogger(__name__)
+
 
 def get_proposals(
     skip: int,
@@ -23,15 +26,10 @@ def get_proposals(
     withAuthorization: bool = True,
 ) -> Paged[models.Proposal]:
     metadata = {
-        "persons": func.count(distinct(models.ProposalHasPerson.personId)),
         "sessions": func.count(distinct(models.BLSession.sessionId)),
-        "beamLines": func.group_concat(distinct(models.BLSession.beamLineName)),
     }
-
     query = (
         db.session.query(models.Proposal, *metadata.values())
-        .options(joinedload(models.Proposal.Person))
-        .outerjoin(models.BLSession)
         .outerjoin(models.ProposalHasPerson)
         .order_by(models.Proposal.proposalId.desc())
         .group_by(models.Proposal.proposalId)
@@ -64,15 +62,8 @@ def get_proposals(
     results = with_metadata(query.all(), list(metadata.keys()))
 
     for result in results:
-        result._metadata["beamLines"] = (
-            result._metadata["beamLines"].split(",")
-            if result._metadata["beamLines"]
-            else []
-        )
-
-        result._metadata["uiGroups"] = groups_from_beamlines(
-            result._metadata["beamLines"]
-        )
+        result._metadata["persons"] = []
+        result._metadata["beamLines"] = []
 
     return Paged(total=total, results=results, skip=skip, limit=limit)
 
