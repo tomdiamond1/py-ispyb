@@ -26,11 +26,17 @@ __license__ = "LGPLv3+"
 import os
 from importlib import import_module
 
+from ....config import settings
+
 
 def init_app(app, **kwargs):
     """Init modules."""
-    for module_name in os.listdir(os.path.dirname(__file__)):
-        if not module_name.startswith("__") and module_name.endswith(".py"):
-            module = import_module(".%s" % module_name[:-3], package=__name__)
-            if hasattr(module, "init_app"):
-                module.init_app(app, **kwargs)
+    module_list = settings.module
+    for module_plugin in module_list:
+        for module_name in module_plugin:
+            enabled = module_plugin[module_name]["ENABLED"]
+            if enabled:
+                module_name: str = auth_plugin[auth_name]["AUTH_MODULE"]
+                module = import_module(".%s" % module_name[:-3], package=__name__)
+                if hasattr(module, "init_app"):
+                    module.init_app(app, **kwargs)

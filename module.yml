@@ -1,0 +1,7 @@
+MODULES:
+  - module_test:
+      ENABLED: false
+      MODULE_NAME: ''
+  - module_test_two:
+      ENABLED: false
+      MODULE_NAME: ''
