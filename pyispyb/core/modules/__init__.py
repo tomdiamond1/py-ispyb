@@ -26,7 +26,7 @@ __license__ = "LGPLv3+"
 import os
 from importlib import import_module
 
-from ....config import settings
+from ...config import settings
 
 
 def init_app(app, **kwargs):
