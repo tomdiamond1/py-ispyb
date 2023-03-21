@@ -36,7 +36,7 @@ def init_app(app, **kwargs):
         for module_name in module_plugin:
             enabled = module_plugin[module_name]["ENABLED"]
             if enabled:
-                module_name: str = auth_plugin[auth_name]["AUTH_MODULE"]
+                module_name: str = module_plugin[module_name]["MODULE_NAME"]
                 module = import_module(".%s" % module_name[:-3], package=__name__)
                 if hasattr(module, "init_app"):
                     module.init_app(app, **kwargs)
